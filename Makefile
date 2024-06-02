@@ -1,14 +1,18 @@
 CORPUS := $(shell pwd)/corpus.json
+LUCENE_CYBORG_CPP_HOME := $(shell pwd)/lucene-cyborg-cpp
+LUCENE_CYBORG_JAVA_HOME := $(shell pwd)/lucene-cyborg-java
+LUCENE_CYBORG_CPP_VALIDATION_HOME := $(shell pwd)/lucene-cyborg-cpp-validation
+JAVA_HOME := $(shell pwd)/env/java
 export
 
 WIKI_SRC = "https://www.dropbox.com/s/wwnfnu441w1ec9p/wiki-articles.json.bz2"
 
-COMMANDS ?=  TOP_100 TOP_100_COUNT COUNT
+COMMANDS ?= TOP_100 TOP_100_COUNT COUNT
+# COMMANDS ?= COUNT
 
-# ENGINES ?= tantivy-0.13 lucene-8.4.0 pisa-0.8.2 rucene-0.1 bleve-0.8.0-scorch rucene-0.1 tantivy-0.11 tantivy-0.14 tantivy-0.15 tantivy-0.16 tantivy-0.17 tantivy-0.18 tantivy-0.19
-# ENGINES ?= tantivy-0.16 lucene-8.10.1 pisa-0.8.2 bleve-0.8.0-scorch bluge-0.2.2 rucene-0.1
-# ENGINES ?= tantivy-0.16 tantivy-0.17 tantivy-0.18 tantivy-0.19
-ENGINES ?= tantivy-0.21 lucene-9.9.2-bp pisa-0.8.2
+BASELINE_ENGINES ?= lucene-9.8.0-normal lucene-9.8.0-reordered
+ENGINES ?= $(BASELINE_ENGINES) lucene-9.8.0-cyborg-cpp lucene-9.8.0-cyborg-java-normal lucene-9.8.0-cyborg-java-reordered
+# ENGINES ?= lucene-9.8.0-cyborg-java-normal lucene-9.8.0-cyborg-java-reordered
 PORT ?= 8080
 
 help:
@@ -25,19 +29,22 @@ clean:
 	@rm -fr results
 	@for engine in $(ENGINES); do cd ${shell pwd}/engines/$$engine && make clean ; done
 
-index:
-	@echo "--- Indexing corpus ---"
-	@for engine in $(ENGINES); do cd ${shell pwd}/engines/$$engine && make index ; done
-
 bench:
 	@echo "--- Benchmarking ---"
 	@rm -fr results
 	@mkdir results
 	@python3 src/client.py queries.txt $(ENGINES)
+	@python3 ${shell pwd}/merge_with_other_engines_results.py
 
-compile:
-	@echo "--- Compiling binaries ---"
-	@for engine in $(ENGINES); do cd ${shell pwd}/engines/$$engine && make compile ; done
+index:
+	@echo "--- Indexing corpus ---"
+	@for engine in $(ENGINES); do cd ${shell pwd}/engines/$$engine && make index ; done
+
+compile: index
+	@echo "--- Compiling lucene-cyborg-cpp ---"
+	@${shell pwd}/pgo_enabled_build.sh
+	@echo "--- Compiling lucene-cyborg-jara ---"
+	@cd $(LUCENE_CYBORG_JAVA_HOME) && ./gradlew jar
 
 serve:
 	@echo "--- Serving results ---"
