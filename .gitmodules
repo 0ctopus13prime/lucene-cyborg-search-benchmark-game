@@ -1,0 +1,6 @@
+[submodule "lucene-cyborg-cpp"]
+	path = lucene-cyborg-cpp
+	url = https://github.com/0ctopus13prime/lucene-cyborg-cpp
+[submodule "lucene-cyborg-java"]
+	path = lucene-cyborg-java
+	url = https://github.com/0ctopus13prime/lucene-cyborg-java

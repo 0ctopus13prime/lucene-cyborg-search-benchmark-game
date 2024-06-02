@@ -43,7 +43,7 @@ index:
 compile: index
 	@echo "--- Compiling lucene-cyborg-cpp ---"
 	@${shell pwd}/pgo_enabled_build.sh
-	@echo "--- Compiling lucene-cyborg-jara ---"
+	@echo "--- Compiling lucene-cyborg-java ---"
 	@cd $(LUCENE_CYBORG_JAVA_HOME) && ./gradlew jar
 
 serve:
