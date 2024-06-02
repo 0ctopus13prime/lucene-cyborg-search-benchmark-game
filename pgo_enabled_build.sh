@@ -1,6 +1,7 @@
 #!/bin/bash
 
 benchmark_home=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+java_home=$benchmark_home/env/java
 
 # let's go our hatch
 cd $LUCENE_CYBORG_CPP_HOME
@@ -17,7 +18,7 @@ rm libLuceneCyborg.a &>/dev/null
 cmake .. \
 	-DCMAKE_BUILD_TYPE:STRING=Release \
 	-DLUCENE_CYBORG_BUILD_JNI:BOOL=ON \
-	-DLUCENE_CYBORG_JNI_INCLUDE_DIRECTORIES:STRING="/usr/lib/jvm/java-21-openjdk-amd64/include;/usr/lib/jvm/java-21-openjdk-amd64/include/linux" \
+	-DLUCENE_CYBORG_JNI_INCLUDE_DIRECTORIES:STRING="$java_home/include;$java_home/include/linux" \
 	-DPGO_PROFILE="-fprofile-generate=$lc_profile_path" \
 	-G Ninja
 
@@ -39,7 +40,7 @@ echo "Compiling again with profiles"
 cmake .. \
 	-DCMAKE_BUILD_TYPE:STRING=Release \
 	-DLUCENE_CYBORG_BUILD_JNI:BOOL=ON \
-	-DLUCENE_CYBORG_JNI_INCLUDE_DIRECTORIES:STRING="/usr/lib/jvm/java-21-openjdk-amd64/include;/usr/lib/jvm/java-21-openjdk-amd64/include/linux" \
+	-DLUCENE_CYBORG_JNI_INCLUDE_DIRECTORIES:STRING="$java_home/include;$java_home/include/linux" \
 	-DPGO_PROFILE="-fprofile-use=$lc_profile_path" \
 	-G Ninja
 
