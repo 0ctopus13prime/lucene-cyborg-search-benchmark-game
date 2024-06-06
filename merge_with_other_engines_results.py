@@ -5,7 +5,7 @@ def load_json(fn):
         return json.load(results)
 
 results = load_json('results.json')
-other_results = load_json('other_engines_results.json')
+other_results = load_json('other_engines_results_c03976e.json')
 
 command_types = {k for k in results}.union({k for k in other_results})
 
