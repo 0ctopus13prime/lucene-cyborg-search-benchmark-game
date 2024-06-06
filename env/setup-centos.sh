@@ -7,7 +7,7 @@ cd $script_dir
 curl -O https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz
 tar xvfz openjdk-21.0.2_linux-x64_bin.tar.gz
 ln -s jdk-21.0.2 java
-export JAVA_HOME=./java
+export JAVA_HOME=${script_dir}/java
 export PATH=$JAVA_HOME/bin:$PATH
 
 # git
