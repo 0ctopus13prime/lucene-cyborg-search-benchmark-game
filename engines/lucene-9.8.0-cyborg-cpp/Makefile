@@ -1,5 +1,5 @@
 clean:
-	@rm reordered_idx &>/dev/null
+	@rm -f reordered_idx &>/dev/null
 
 serve:
 	@${LUCENE_CYBORG_CPP_HOME}/build/tantivy_bench_pisa_comparison reordered_idx
