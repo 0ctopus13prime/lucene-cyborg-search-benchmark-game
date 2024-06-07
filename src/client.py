@@ -75,8 +75,8 @@ def printProgressBar (progress, prefix = '', suffix = '', decimals = 1, length =
     if progress >= 1:
         print()
 
-WARMUP_TIME = 3 * 60 # 10 minutes
-NUM_ITER = 10
+WARMUP_TIME = 10 * 60 # 10 minutes
+NUM_ITER = 30 
 
 if __name__ == "__main__":
     import sys
@@ -126,7 +126,8 @@ if __name__ == "__main__":
                         sum_durations += duration
                         query_idx[query.query]["count"] = count
                         query_idx[query.query]["duration"].append(duration)
-                print("Average duration = %f for engine=%s, command=%s" % (sum_durations / num_results, engine, command))
+                if num_results > 0:
+                    print("Average duration = %f for engine=%s, command=%s" % (sum_durations / num_results, engine, command))
                 printProgressBar(float(i + 1) / NUM_ITER, prefix = 'Run:   ', suffix = 'Complete', length = 50)
             for query in engine_results:
                 query["duration"].sort()
