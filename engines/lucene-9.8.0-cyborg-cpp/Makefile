@@ -10,5 +10,5 @@ compile:
 	@echo '' > /dev/null
 
 idx: clean
-	@ln -s ${shell pwd}/../lucene-9.8.0-reordered/idx ${shell pwd}/reordered_idx
+	@ln -s ${shell pwd}/../lucene-9.8.0-reordered/idx_docs_freqs ${shell pwd}/reordered_idx
 
