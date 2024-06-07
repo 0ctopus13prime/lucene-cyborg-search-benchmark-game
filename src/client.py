@@ -75,7 +75,7 @@ def printProgressBar (progress, prefix = '', suffix = '', decimals = 1, length =
     if progress >= 1:
         print()
 
-WARMUP_TIME = 1 * 60 # 10 minutes
+WARMUP_TIME = 3 * 60 # 10 minutes
 NUM_ITER = 10
 
 if __name__ == "__main__":
@@ -116,12 +116,17 @@ if __name__ == "__main__":
                     break
             printProgressBar(0, prefix = 'Run:   ', suffix = 'Complete', length = 50)
             for i in range(NUM_ITER):
+                num_results = 0
+                sum_durations = 0
                 for (query, count, duration) in drive(queries_shuffled, search_client, command):
                     if count is None:
                         query_idx[query.query] = {count: -1, duration: []}
                     else:
+                        num_results += 1
+                        sum_durations += duration
                         query_idx[query.query]["count"] = count
                         query_idx[query.query]["duration"].append(duration)
+                print("Average duration = %f for engine=%s, command=%s" % (sum_durations / num_results, engine, command))
                 printProgressBar(float(i + 1) / NUM_ITER, prefix = 'Run:   ', suffix = 'Complete', length = 50)
             for query in engine_results:
                 query["duration"].sort()
