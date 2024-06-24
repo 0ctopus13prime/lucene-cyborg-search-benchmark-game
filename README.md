@@ -21,6 +21,28 @@ because your product was 31x on one of the test is not tolerated. If this happen
 host a wall of shame.
 Bullshit claims about performance are a plague in the database world.
 
+# How to reproduce this benchmark in AWS?
+1. Select c7i.2xlarge as instance type.
+2. Select Amazon Linux 2023 as OS type.
+3. Allocate 40 giga bytes in disk.
+4. Install git : `sudo yum install git -y`.
+5. Clone this repo : `git clone https://github.com/0ctopus13prime/lucene-cyborg-search-benchmark-game`
+6. `cd lucene-cyborg-search-benchmark-game`
+7. Submodule set-up
+ 6.1. `submodule init`
+ 6.2. `submodule update`.
+8. Add execution permissions. `find . -type f -exec grep -Iq '^#!' {} \; -print -exec chmod 755 {} \;`
+9. Environment set-up. `cd env && source ./setup-ubuntu.sh`
+10. Make corpus : `make corpus`
+11. Make index : `make index`
+12. Generate valication files : `cd lucene-cyborg-cpp-validation && make gen`
+13. Compile : `make compile`
+14. Run benchmark : `make bench`
+15. Display results with 8080 port : `make serve`.
+
+# About the result.
+Note that lucene-cyborg-cpp COUNT disjunction type results do not align with [paper](https://github.com/0ctopus13prime/lucene-cyborg-paper)
+It needs few manual modifications to reproduce the same results described in the paper. 
 
 ## The benchmark
 
